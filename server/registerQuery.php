@@ -13,6 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate the input
     if (!empty($username) && !empty($email) && !empty($password)) {
+        // Check if the email is valid
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid email format']);
+            exit; // Terminate the script
+        }
+
         // Check if the username or email already exists
         $stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = :username OR email = :email");
         $stmtCheck->bindParam(':username', $username);
