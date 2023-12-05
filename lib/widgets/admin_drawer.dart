@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/pages/admin_home.dart';
 import 'package:provider/provider.dart';
+import '../pages/about.dart';
 import '../pages/list_of_users.dart';
 import '../pages/login_page.dart';
 import '../provider/user_provider.dart';
@@ -85,6 +86,20 @@ class AdminDrawer extends StatelessWidget {
               userProvider.selectedTileIndex = 2; // Set the index of the tapped tile
             },
             selected: userProvider.selectedTileIndex == 2,
+            selectedTileColor: Colors.blue,
+          ),
+          buildListTile(
+            icon: Icons.info,
+            title: 'About',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutPage()), // Link to the AboutPage
+              );
+              userProvider.selectedTileIndex = 3; // Set the index of the tapped tile
+            },
+            selected: userProvider.selectedTileIndex == 3,
             selectedTileColor: Colors.blue,
           ),
           buildListTile(
