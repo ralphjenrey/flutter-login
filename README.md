@@ -1,20 +1,40 @@
-<<<<<<< HEAD
-# flutter_login
+# Flutter Authentication App
 
-A new Flutter project.
+This Flutter app provides a simple authentication system along with a dashboard and the ability to manage user accounts.
 
-## Getting Started
+## Features
+1. **Authentication:** Users can sign in or register to access the app.
+2. **Dashboard:** A central hub displaying relevant information and features.
+3. **Manage Accounts:** Users can update their account details and perform account-related actions.
 
-This project is a starting point for a Flutter application.
+## Installation
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
+- Android Studio
+- Pixel 3a API (device)
+- Xampp
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/ralphjenrey/flutter-login.git
+   ```
+2. **Database Setup**
+- Start Apache and MySQL in Xampp.
+- Import the database located in the database folder into MySQL.
+- Configure IP Address
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# flutter-login
->>>>>>> b5c868677b06bb69b02c8e4a763624e921cc6f05
+- Open login_page.dart, register_page.dart, and list_of_users.dart.
+- Change the IP address to your IPv4 address. To find your IPv4 address, run the following command in the command prompt:
+
+3. **Configure IP Address**
+
+- Open login_page.dart, register_page.dart, and list_of_users.dart.
+- Change the IP address to your IPv4 address. To find your IPv4 address, run the following command in the command prompt:
+```bash
+ipconfig
+```
+## Run the App
+Execute the main Dart file in your Flutter project.
+Feel free to customize the app based on your requirements or contribute to the project.
+
+Happy coding!

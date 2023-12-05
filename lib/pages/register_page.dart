@@ -18,7 +18,7 @@ class RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = false;
   Future<void> _register() async {
-    const String url = 'http://192.168.1.8:80/flutter_login/registerQuery.php';
+    const String url = 'http://192.168.1.2:80/flutter_login/registerQuery.php';
 
     try {
       final response = await http.post(

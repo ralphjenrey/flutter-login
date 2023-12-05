@@ -21,7 +21,7 @@ class LoginPageState extends State<LoginPage> {
   bool isPasswordVisible = false;
   Future<void> _login() async {
     const String url =
-        'http://192.168.1.8:80/flutter_login/loginProcess.php'; // Replace with your actual backend URL
+        'http://192.168.1.2:80/flutter_login/loginProcess.php'; // Replace with your actual backend URL
 
     try {
       final response = await http.post(
@@ -41,7 +41,8 @@ class LoginPageState extends State<LoginPage> {
           showToast('Login successful', Colors.green);
 
           // Set the user in the session
-          Provider.of<UserProvider>(context, listen: false).setUser(usernameController.text);
+          Provider.of<UserProvider>(context, listen: false)
+              .setUser(usernameController.text);
 
           // Navigate to AdminHomePage on successful login
           Navigator.push(
@@ -85,7 +86,7 @@ class LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-             Center(
+            Center(
               child: Text(
                 'Login',
                 style: GoogleFonts.poppins(
@@ -96,7 +97,7 @@ class LoginPageState extends State<LoginPage> {
             const SizedBox(height: 16.0),
             TextField(
               controller: usernameController,
-              decoration:  InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Username',
                 labelStyle: GoogleFonts.poppins(),
                 border: OutlineInputBorder(
@@ -108,7 +109,7 @@ class LoginPageState extends State<LoginPage> {
             TextField(
               controller: passwordController,
               obscureText: !isPasswordVisible,
-              decoration:  InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Password',
                 labelStyle: GoogleFonts.poppins(),
                 border: OutlineInputBorder(
@@ -116,9 +117,7 @@ class LoginPageState extends State<LoginPage> {
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    isPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
+                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                     color: Colors.black54,
                   ),
                   onPressed: () {
@@ -153,15 +152,16 @@ class LoginPageState extends State<LoginPage> {
                 onPressed: _login,
                 style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
-                  backgroundColor: Colors.blue// Set the background color to blue
-                ),
-                child: Text('Login',
+                    backgroundColor:
+                        Colors.blue // Set the background color to blue
+                    ),
+                child: Text(
+                  'Login',
                   style: GoogleFonts.poppins(
-                      fontSize: 18.0,
-                      color: Colors.white,
+                    fontSize: 18.0,
+                    color: Colors.white,
                   ),
                 ),
-
               ),
             ),
           ],
