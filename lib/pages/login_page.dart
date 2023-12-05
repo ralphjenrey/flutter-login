@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../provider/user_provider.dart';
 import 'register_page.dart';
 import 'admin_home.dart'; // Import the AdminHomePage
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  bool isPasswordVisible = false;
   Future<void> _login() async {
     const String url =
         'http://192.168.1.8:80/flutter_login/loginProcess.php'; // Replace with your actual backend URL
@@ -79,18 +80,16 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login Page'),
-      ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Center(
+             Center(
               child: Text(
                 'Login',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   fontSize: 30,
                 ),
               ),
@@ -98,26 +97,41 @@ class LoginPageState extends State<LoginPage> {
             const SizedBox(height: 16.0),
             TextField(
               controller: usernameController,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 labelText: 'Username',
-                border: OutlineInputBorder(),
+                labelStyle: GoogleFonts.poppins(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
               ),
             ),
             const SizedBox(height: 16.0),
             TextField(
               controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
+              obscureText: !isPasswordVisible,
+              decoration:  InputDecoration(
                 labelText: 'Password',
-                border: OutlineInputBorder(),
+                labelStyle: GoogleFonts.poppins(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: Colors.black54,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPasswordVisible = !isPasswordVisible;
+                    });
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _login,
-              child: const Text('Login'),
-            ),
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 // Navigate to the register page
                 Navigator.push(
@@ -125,7 +139,31 @@ class LoginPageState extends State<LoginPage> {
                   MaterialPageRoute(builder: (context) => const RegisterPage()),
                 );
               },
-              child: const Text('Register'),
+              child: Text(
+                'No account yet? Tap to register.',
+                style: GoogleFonts.poppins(
+                  fontSize: 14.0,
+                  color: Colors.blueAccent, // Set the text color to blue
+                ),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            SizedBox(
+              width: double.infinity, // Make the button full width
+              child: ElevatedButton(
+                onPressed: _login,
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                  backgroundColor: Colors.blue// Set the background color to blue
+                ),
+                child: Text('Login',
+                  style: GoogleFonts.poppins(
+                      fontSize: 18.0,
+                      color: Colors.white,
+                  ),
+                ),
+
+              ),
             ),
           ],
         ),

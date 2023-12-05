@@ -1,74 +1,131 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/pages/admin_home.dart';
 import 'package:provider/provider.dart';
 import '../pages/list_of_users.dart';
 import '../pages/login_page.dart';
-import '../provider/user_provider.dart'; // Import the ListofUsers widget
+import '../provider/user_provider.dart';
+import '../pages/profile.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'Admin Drawer',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+          Container(
+            height: 140, // Set the height of the DrawerHeader
+            child: DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Admin Panel',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Welcome, ${userProvider.username}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: const Text('Home'),
+          buildListTile(
+            icon: Icons.home,
+            title: 'Home',
             onTap: () {
-              // Handle navigation for home
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: const Text('Accounts'),
-            onTap: () {
-              // Handle navigation for accounts
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ListofUsers()), // Navigate to ListofUsers
+                MaterialPageRoute(builder: (context) => AdminHomePage()),
               );
+              userProvider.selectedTileIndex = 0; // Set the index of the tapped tile
             },
+            selected: userProvider.selectedTileIndex == 0,
+            selectedTileColor: Colors.blue,
           ),
-          ListTile(
-            leading: Icon(Icons.account_circle),
-            title: const Text('Profile'),
+          buildListTile(
+            icon: Icons.person,
+            title: 'Accounts',
             onTap: () {
-              // Handle navigation for profile
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ListofUsers()),
+              );
+              userProvider.selectedTileIndex = 1; // Set the index of the tapped tile
             },
+            selected: userProvider.selectedTileIndex == 1,
+            selectedTileColor: Colors.blue,
           ),
-          ListTile(
-            leading: Icon(Icons.logout),
-            title: const Text('Logout'),
+          buildListTile(
+            icon: Icons.account_circle,
+            title: 'Profile',
             onTap: () {
-              // Handle logout
-              // Clear the user session and navigate to the login page
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()), // Link to the ProfilePage
+              );
+              userProvider.selectedTileIndex = 2; // Set the index of the tapped tile
+            },
+            selected: userProvider.selectedTileIndex == 2,
+            selectedTileColor: Colors.blue,
+          ),
+          buildListTile(
+            icon: Icons.logout,
+            title: 'Logout',
+            onTap: () {
               Provider.of<UserProvider>(context, listen: false).clearUser();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );
             },
+            selected: false,
+            selectedTileColor: Colors.grey,
           ),
         ],
+      ),
+    );
+  }
+
+  Card buildListTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    required bool selected,
+    required Color selectedTileColor,
+  }) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      color: selected ? selectedTileColor : null,
+      child: ListTile(
+        leading: Icon(icon),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: selected ? Colors.white : Colors.black,
+          ),
+        ),
+        onTap: onTap,
       ),
     );
   }

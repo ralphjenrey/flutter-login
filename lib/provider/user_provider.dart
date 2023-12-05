@@ -14,4 +14,12 @@ class UserProvider extends ChangeNotifier {
     _username = null;
     notifyListeners();
   }
+  int _selectedTileIndex = -1; // Initialize with an invalid index
+
+  int get selectedTileIndex => _selectedTileIndex;
+
+  set selectedTileIndex(int index) {
+    _selectedTileIndex = index;
+    notifyListeners();
+  }
 }

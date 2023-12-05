@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import '../provider/user_provider.dart';
 
 class ListofUsers extends StatefulWidget {
   const ListofUsers({Key? key}) : super(key: key);
@@ -30,16 +33,16 @@ class _ListofUsersState extends State<ListofUsers> {
 
       if (response.statusCode == 200) {
         final List<Map<String, dynamic>> userList =
-            List<Map<String, dynamic>>.from(json.decode(response.body));
+        List<Map<String, dynamic>>.from(json.decode(response.body));
         setState(() {
           users = userList;
           usernameControllers = List.generate(
             users.length,
-            (index) => TextEditingController(text: users[index]['username']),
+                (index) => TextEditingController(text: users[index]['username']),
           );
           emailControllers = List.generate(
             users.length,
-            (index) => TextEditingController(text: users[index]['email']),
+                (index) => TextEditingController(text: users[index]['email']),
           );
         });
       } else {
@@ -54,105 +57,92 @@ class _ListofUsersState extends State<ListofUsers> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('List of Users'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            columns: const [
-              DataColumn(label: Text('ID')),
-              DataColumn(label: Text('Username')),
-              DataColumn(label: Text('Email')),
-              DataColumn(label: Text('Actions')),
-            ],
-            rows: users
-                .asMap()
-                .entries
-                .map(
-                  (entry) => DataRow(
-                cells: [
-                  DataCell(Text(entry.value['id'].toString())),
-                  DataCell(
-                    _buildEditableCell(
-                      entry.key,
-                      'username',
-                      entry.value['username'],
-                      usernameControllers[entry.key],
+    return WillPopScope(
+      onWillPop: () async {
+        // Set selectedTileIndex before navigating back
+        Provider.of<UserProvider>(context, listen: false).selectedTileIndex = 0;
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('List of Users'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: const [
+                DataColumn(label: Text('ID')),
+                DataColumn(label: Text('Username')),
+                DataColumn(label: Text('Email')),
+                DataColumn(label: Text('Actions')),
+              ],
+              rows: users
+                  .asMap()
+                  .entries
+                  .map(
+                    (entry) => DataRow(
+                  cells: [
+                    DataCell(Text(entry.value['id'].toString())),
+                    DataCell(
+                      _buildEditableCell(
+                        entry.key,
+                        'username',
+                        entry.value['username'],
+                        usernameControllers[entry.key],
+                      ),
                     ),
-                  ),
-                  DataCell(
-                    _buildEditableCell(
-                      entry.key,
-                      'email',
-                      entry.value['email'],
-                      emailControllers[entry.key],
+                    DataCell(
+                      _buildEditableCell(
+                        entry.key,
+                        'email',
+                        entry.value['email'],
+                        emailControllers[entry.key],
+                      ),
                     ),
-                  ),
-                  DataCell(
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            _toggleEdit(entry.key);
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            _deleteUser(users[entry.key]['id']);
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
-                .toList(),
+                    DataCell(
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: editingRows.contains(entry.key)
+                                ? const Icon(Icons.check)
+                                : const Icon(Icons.edit),
+                            onPressed: () {
+                              _toggleEdit(entry.key);
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              _deleteUser(users[entry.key]['id']);
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+                  .toList(),
+            ),
           ),
         ),
       ),
     );
   }
 
-
   Widget _buildEditableCell(
-    int index,
-    String field,
-    String value,
-    TextEditingController controller,
-  ) {
+      int index,
+      String field,
+      String value,
+      TextEditingController controller,
+      ) {
     return editingRows.contains(index)
         ? TextFormField(
-            controller: controller,
-          )
+      controller: controller,
+    )
         : Text(value);
-  }
-
-  DataCell buildActionCell(int index) {
-    return DataCell(
-      Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              _toggleEdit(index);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              _deleteUser(users[index]['id']);
-            },
-          ),
-        ],
-      ),
-    );
   }
 
   void _toggleEdit(int index) {
@@ -228,7 +218,6 @@ class _ListofUsersState extends State<ListofUsers> {
       print('Error: $e');
     }
   }
-
 }
 
 extension SetExtension<T> on Set<T> {

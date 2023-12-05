@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import './pages/login_page.dart'; // Import the login page
 import 'package:provider/provider.dart';
 import './pages/welcome.dart';
